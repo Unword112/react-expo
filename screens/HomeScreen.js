@@ -2,6 +2,9 @@ import React, { Component } from 'react'
 import { Text, View, StyleSheet, TouchableOpacity} from 'react-native'
 import firebase from 'firebase/app';
 
+import Fire from '../Fire'
+import { Button } from 'react-native-web';
+
 export default class HomeScreen extends Component {
     state = {
         email: '',
@@ -24,6 +27,10 @@ export default class HomeScreen extends Component {
             <TouchableOpacity onPress={this.signOutUser} style={styles.button}>
                 Logout
             </TouchableOpacity>
+
+            <Button
+                title='Logout'
+                onPress={Fire.signOut} />
             </View>
         )
     }

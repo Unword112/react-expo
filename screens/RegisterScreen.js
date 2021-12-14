@@ -1,35 +1,20 @@
 import React, { Component } from 'react'
 import { Text, View, StyleSheet, TouchableOpacity, TextInput  } from 'react-native'
 
-import firebase from 'firebase'
+import Fire from '../Fire'
 
 export default class RegisterScreen extends Component {
     state = {
-        name: '',
-        email: '',
-        password: '',
-        confirm_password: '',
+        user: {
+            name: '',
+            email: '',
+            password: '',
+        },
         errorMessage: null,
     }
 
-    handleSummit = () => {
-        const { name, email, password, confirm_password } = this.state;
-
-        firebase
-        .auth()
-        .createUserWithEmailAndPassword(name, email, password)
-        .then(userCredentials => {
-            /*if(this.state.password != this.state.confirm_password){
-                this.setState({ errorMessage: error.message })
-            } else {
-                
-            }*/
-            userCredential => this.firestore.collection('users')
-            .doc(userCredential.user.uid).set({name})
-            return userCredentials.user.updateProfile({
-                displayName: this.state.name
-            })
-        })
+    handleSignUp = () => {
+        Fire.shared.createUser(this.state.user);
     }
 
     render() {
@@ -39,50 +24,36 @@ export default class RegisterScreen extends Component {
                 <View>
                     {this.state.errorMessage && <Text style={styles.error}>{this.state.errorMessage}</Text>}
                 </View>
-                <View style={{marginTop:5}}>
-                    <Text style={{marginHorizontal: 10}}>Name</Text>
-                    <TextInput style={styles.input}
-                        placeholder='name'
-                        name='name'
-                        type='name'
-                        onChangeText={name => this.setState({name})}
-                        value={this.state.name}
-                    />
-                </View>
-                <View style={{marginTop:5}}>
-                    <Text style={{marginHorizontal: 10}}>Email</Text>
-                    <TextInput style={styles.input}
-                        placeholder='Email Address'
-                        name='Email'
-                        type='email'
-                        onChangeText={email => this.setState({email})}
-                        value={this.state.email}
-                    />
-                </View>
-                <View style={{marginTop:5}}>
-                    <Text style={{marginHorizontal: 10}}>Password</Text>
-                    <TextInput style={styles.input}
-                        placeholder='Password'
-                        name='password'
-                        type='password'
-                        secureTextEntry
-                        onChangeText={password => this.setState({password})}
-                        value={this.state.password}
-                    />
-                </View>
-                <View style={{marginTop:5}}>
-                    <Text style={{marginHorizontal: 10}}>Confirm Password</Text>
-                    <TextInput style={styles.input}
-                        placeholder='confirm-password'
-                        name='confirm-password'
-                        type='confirm-password'
-                        secureTextEntry
-                        onChangeText={confirm_password => this.setState({confirm_password})}
-                        value={this.state.confirm_password}
-                    />
-                </View>s
-                <TouchableOpacity style={styles.button} onPress={this.handleSummit}>
-                    <Text style={{color:'#FFF', fontSize:'bold'}}>Sign Up</Text>
+                <View>
+                        <Text style={styles.inputTitle}>Full Name</Text>
+                        <TextInput
+                            autoCapitalize="none"
+                            onChangeText={name => this.setState({user:{...this.state.user, name }})}
+                            value={this.state.name}
+                            style={styles.input}
+                        />
+                    </View>
+                    <View>
+                        <Text style={styles.inputTitle}>Email Address</Text>
+                        <TextInput
+                            autoCapitalize="none"
+                            onChangeText={email => this.setState({user:{...this.state.user, email }})}
+                            value={this.state.email}
+                            style={styles.input}
+                        />
+                    </View>
+                    <View>
+                        <Text style={styles.inputTitle}>Password</Text>
+                        <TextInput
+                            secureTextEntry
+                            autoCapitalize="none"
+                            onChangeText={password => this.setState({user:{...this.state.user, password }})}
+                            value={this.state.password}
+                            style={styles.input}
+                        />
+                    </View>
+                    <TouchableOpacity onPress={this.handleSignUp} style={styles.button}>
+                    <Text style={{ color: "#FFF" }}>Sign up</Text>
                 </TouchableOpacity>
             </View>
         )
